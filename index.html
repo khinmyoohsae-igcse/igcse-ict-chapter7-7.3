@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IGCSE ICT - Development & Testing (7.3 & 7.3.1) Quiz (20 MCQs)</title>
+    <style>
+        :root {
+            --bg-main: #090d16;
+            --bg-card: #131d31;
+            --border-color: #223354;
+            --accent: #38bdf8;
+            --accent-hover: #0ea5e9;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        header {
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.5rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        header h1 {
+            color: var(--accent);
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.35rem;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        main {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .quiz-status {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .score-pill {
+            background-color: #0c4a6e;
+            color: #7dd3fc;
+            padding: 0.35rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid #0284c7;
+        }
+
+        .card {
+            width: 100%;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 1.25rem;
+            padding: 2rem;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .option-btn {
+            width: 100%;
+            text-align: left;
+            background-color: #1e293b;
+            color: var(--text-main);
+            padding: 1rem 1.25rem;
+            border-radius: 0.85rem;
+            border: 1px solid #334155;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background-color: #283548;
+            border-color: var(--accent);
+            transform: translateY(-1px);
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+        }
+
+        .option-btn.correct {
+            background-color: #064e3b !important;
+            border-color: #059669 !important;
+            color: #ecfdf5 !important;
+        }
+
+        .option-btn.incorrect {
+            background-color: #7f1d1d !important;
+            border-color: #dc2626 !important;
+            color: #fee2e2 !important;
+        }
+
+        .feedback-box {
+            padding: 1.15rem;
+            border-radius: 0.85rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .feedback-box.correct-feedback {
+            background-color: #022c22;
+            border: 1px solid #047857;
+            color: #a7f3d0;
+        }
+
+        .feedback-box.incorrect-feedback {
+            background-color: #450a0a;
+            border: 1px solid #b91c1c;
+            color: #fecdd3;
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            color: #0f172a;
+            font-weight: 700;
+            padding: 0.85rem 1.75rem;
+            border-radius: 0.85rem;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-1px);
+        }
+
+        .results-card {
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+
+        .results-card h2 {
+            font-size: 2.25rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .results-card p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        footer {
+            background-color: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+            padding: 1rem;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>IGCSE ICT Practice Quiz</h1>
+        <p>Topics 7.3 & 7.3.1 Development and Testing (20 MCQs)</p>
+    </header>
+
+    <main>
+        <div class="quiz-status">
+            <span id="question-counter">Question 1 of 20</span>
+            <span id="score-display" class="score-pill">Score: 0</span>
+        </div>
+
+        <!-- Quiz Container -->
+        <div id="quiz-container" class="card">
+            <div id="question-box" class="question-text">
+                Loading question...
+            </div>
+
+            <div id="options-container" class="options-list">
+                <!-- Options populated dynamically -->
+            </div>
+
+            <div id="feedback-box" class="feedback-box hidden">
+                <!-- Feedback populated dynamically -->
+            </div>
+
+            <div style="display: flex; justify-content: flex-end;">
+                <button id="next-btn" onclick="nextQuestion()" class="btn-primary hidden">Next Question</button>
+            </div>
+        </div>
+
+        <!-- Results Container -->
+        <div id="results-container" class="card results-card hidden">
+            <h2>Quiz Completed! 🎉</h2>
+            <p id="final-score">You scored X out of 20</p>
+            <button onclick="restartQuiz()" class="btn-primary">Restart Quiz</button>
+        </div>
+    </main>
+
+    <footer>
+        IGCSE ICT Revision &bull; Development and Testing
+    </footer>
+
+    <script>
+        const questions = [
+            {
+                question: "What is the primary objective of the testing stage within the Systems Life Cycle?",
+                options: [
+                    { text: "To ensure that the newly developed system functions correctly, meets user requirements, and is free of errors before live rollout", isCorrect: true, rationale: "Testing verifies software reliability, logic correctness, and fitness for purpose prior to implementation." },
+                    { text: "To investigate how the old manual filing system operated ten years ago", isCorrect: false, rationale: "Investigation is part of the systems analysis stage." },
+                    { text: "To format hard disk drives and install operating systems", isCorrect: false, rationale: "This describes hardware installation." },
+                    { text: "To repair broken printer cables and power supplies", isCorrect: false, rationale: "This describes hardware maintenance." }
+                ]
+            },
+            {
+                question: "Which of the following best defines 'Normal Test Data'?",
+                options: [
+                    { text: "Typical, expected data values that lie well within the accepted boundaries of a system (e.g., entering age 30 when valid range is 1 to 100)", isCorrect: true, rationale: "Normal test data checks whether standard, valid inputs are processed correctly by the system." },
+                    { text: "Extreme data values that sit right on the absolute limits (e.g., entering 1 or 100)", isCorrect: false, rationale: "This describes boundary/extreme test data." },
+                    { text: "Invalid data values outside acceptable limits (e.g., entering -5 or 250)", isCorrect: false, rationale: "This describes erroneous/abnormal test data." },
+                    { text: "Random text characters entered into numeric fields", isCorrect: false, rationale: "This tests data type error handling." }
+                ]
+            },
+            {
+                question: "Which of the following best defines 'Extreme (Boundary) Test Data'?",
+                options: [
+                    { text: "Data values that sit right on the absolute upper and lower limits of an accepted range (e.g., entering 1 and 100 for an age range of 1 to 100)", isCorrect: true, rationale: "Boundary testing checks how the system behaves at the precise limits of valid input thresholds." },
+                    { text: "Typical everyday data values like entering age 45", isCorrect: false, rationale: "This describes normal test data." },
+                    { text: "Invalid data values way outside accepted limits like entering 999", isCorrect: false, rationale: "This describes erroneous test data." },
+                    { text: "Random images scanned from textbooks", isCorrect: false, rationale: "Unrelated." }
+                ]
+            },
+            {
+                question: "Which of the following best defines 'Erroneous (Abnormal) Test Data'?",
+                options: [
+                    { text: "Invalid data values that lie outside acceptable limits or are of the incorrect data type (e.g., entering -10, 500, or text 'abc' into an age field)", isCorrect: true, rationale: "Erroneous test data tests whether the system correctly rejects invalid inputs and triggers appropriate error messages." },
+                    { text: "Typical everyday data values like entering age 25", isCorrect: false, rationale: "This describes normal test data." },
+                    { text: "Exact boundary limit values like entering 1 or 100", isCorrect: false, rationale: "This describes boundary test data." },
+                    { text: "Pre-approved lookup codes", isCorrect: false, rationale: "This describes valid table lookups." }
+                ]
+            },
+            {
+                question: "If a software field accepts exam scores between 0 and 100 inclusive, which test values represent valid 'Extreme (Boundary)' test data?",
+                options: [
+                    { text: "0 and 100", isCorrect: true, rationale: "0 and 100 sit right on the absolute boundaries of the valid score range." },
+                    { text: "50 and 51", isCorrect: false, rationale: "These are normal middle values." },
+                    { text: "-1 and 101", isCorrect: false, rationale: "-1 and 101 are erroneous values just outside the boundaries." },
+                    { text: "-50 and 'fail'", isCorrect: false, rationale: "These are erroneous data values." }
+                ]
+            },
+            {
+                question: "If a software field accepts exam scores between 0 and 100 inclusive, which test values represent valid 'Erroneous (Abnormal)' test data?",
+                options: [
+                    { text: "-1, 101, and 'thirty'", isCorrect: true, rationale: "-1 and 101 are outside numerical boundaries, and 'thirty' is the wrong data type." },
+                    { text: "0 and 100", isCorrect: false, rationale: "These are boundary test values." },
+                    { text: "40 and 85", isCorrect: false, rationale: "These are normal test values." },
+                    { text: "50", isCorrect: false, rationale: "This is a normal test value." }
+                ]
+            },
+            {
+                question: "What is a 'Test Plan' in software development?",
+                options: [
+                    { text: "A structured document outlining what components will be tested, specific test data to be used, expected outcomes, and actual test results", isCorrect: true, rationale: "Test plans organize the entire testing process systematically." },
+                    { text: "A receipt printed at supermarket checkout tills", isCorrect: false, rationale: "This is a retail sales receipt." },
+                    { text: "A computer virus scan report", isCorrect: false, rationale: "This is anti-malware reporting." },
+                    { text: "A student attendance register book", isCorrect: false, rationale: "This is school administration." }
+                ]
+            },
+            {
+                question: "What key columns should be included in a well-designed Test Plan table?",
+                options: [
+                    { text: "Test Case ID, Description/Reason for test, Test Data used, Expected Outcome, Actual Outcome, and Pass/Fail Status", isCorrect: true, rationale: "A complete test plan table tracks test descriptions, inputs, expected results, and actual outcomes." },
+                    { text: "Employee home cooking recipes and movie reviews", isCorrect: false, rationale: "Unrelated." },
+                    { text: "Detailed stock market trading portfolios", isCorrect: false, rationale: "Unrelated." },
+                    { text: "Meteorological weather satellite coordinates", isCorrect: false, rationale: "Unrelated." }
+                ]
+            },
+            {
+                question: "What is 'Alpha Testing' during software development?",
+                options: [
+                    { text: "Initial testing carried out internally by the software development team or company employees before the product is released to external users", isCorrect: true, rationale: "Alpha testing is internal testing performed by developers to catch early bugs." },
+                    { text: "Testing performed by paying customers in public beta environments", isCorrect: false, rationale: "This describes beta testing." },
+                    { text: "Hardware stress testing underwater", isCorrect: false, rationale: "Unrelated." },
+                    { text: "A manual paper filing audit", isCorrect: false, rationale: "Unrelated." }
+                ]
+            },
+            {
+                question: "What is 'Beta Testing' during software development?",
+                options: [
+                    { text: "Testing carried out by a sample of external real users in real-world environments before final commercial release", isCorrect: true, rationale: "Beta testing gathers feedback from external users in actual operational settings." },
+                    { text: "Internal testing performed strictly by software programmers in closed labs", isCorrect: false, rationale: "This describes alpha testing." },
+                    { text: "Testing performed by hardware manufacturers before chips are manufactured", isCorrect: false, rationale: "Unrelated." },
+                    { text: "A test of printer paper ink quality", isCorrect: false, rationale: "Unrelated." }
+                ]
+            },
+            {
+                question: "What is 'Black-Box Testing' (Functional Testing)?",
+                options: [
+                    { text: "Testing software functionality based on inputs and expected outputs without looking at the internal source code structure", isCorrect: true, rationale: "Black-box testing verifies that the software produces correct outputs for given inputs without examining internal code." },
+                    { text: "Testing computer monitors inside completely dark rooms with zero lights", isCorrect: false, rationale: "This is visual display testing, not software black-box testing." },
+                    { text: "Writing programming code using black colored text fonts", isCorrect: false, rationale: "Unrelated." },
+                    { text: "Hacking into competitor servers illegally", isCorrect: false, rationale: "Unrelated." }
+                ]
+            },
+            {
+                question: "What is 'White-Box Testing' (Structural Testing)?",
+                options: [
+                    { text: "Testing software by examining and testing the internal source code paths, logic structures, and programming loops", isCorrect: true, rationale: "White-box testing inspects internal code logic and execution pathways." },
+                    { text: "Testing computer hardware components painted in white paint", isCorrect: false, rationale: "Unrelated." },
+                    { text: "Testing paper documents using white correction fluid", isCorrect: false, rationale: "Unrelated." },
+                    { text: "Checking printer toner levels", isCorrect: false, rationale: "Unrelated." }
+                ]
+            },
+            {
+                question: "Why is live testing with real operational data important before full system implementation?",
+                options: [
+                    { text: "To ensure the system can handle large volumes of real-world data without crashing or slowing down significantly", isCorrect: true, rationale: "Live data testing verifies system performance and stability under real operational loads." },
+                    { text: "To delete all customer records permanently", isCorrect: false, rationale: "Unrelated." },
+                    { text: "To make the software require zero maintenance", isCorrect: false, rationale: "Maintenance is always required." },
+                    { text: "To eliminate the need for test plans", isCorrect: false, rationale: "Test plans are still essential." }
+                ]
+            },
+            {
+                question: "What happens during the 'Debugging' process when a test fails?",
+                options: [
+                    { text: "Programmers locate, analyze, and fix the errors (bugs) in the source code that caused the test failure", isCorrect: true, rationale: "Debugging is the process of finding and correcting coding errors discovered during testing." },
+                    { text: "Exterminating physical insects inside computer monitor casings", isCorrect: false, rationale: "Bugs in software are coding errors, not literal insects." },
+                    { text: "Formatting hard disk drives and erasing all files", isCorrect: false, rationale: "This is disk formatting." },
+                    { text: "Replacing broken network Ethernet cables", isCorrect: false, rationale: "This is hardware maintenance." }
+                ]
+            },
+            {
+                question: "What is 'User Acceptance Testing' (UAT)?",
+                options: [
+                    { text: "Testing performed by the end-users or clients to verify that the system meets all requirements specified in the system specification before final sign-off", isCorrect: true, rationale: "UAT ensures the system satisfies user operational needs before formal acceptance." },
+                    { text: "Testing performed by computer hackers trying to breach firewalls", isCorrect: false, rationale: "This describes penetration testing." },
+                    { text: "Testing performed by hardware electricians", isCorrect: false, rationale: "Unrelated." },
+                    { text: "Grading student exam papers using OMR scanners", isCorrect: false, rationale: "This is OMR exam grading." }
+                ]
+            },
+            {
+                question: "Why must software testing be thorough and cover normal, boundary, and erroneous data?",
+                options: [
+                    { text: "To ensure the system does not fail unexpectedly when users enter unusual, unexpected, or incorrect data", isCorrect: true, rationale: "Thorough testing ensures robustness across all possible user input scenarios." },
+                    { text: "To make software development take 50 years longer", isCorrect: false, rationale: "Efficiency is key, but thoroughness prevents software crashes." },
+                    { text: "To increase the cost of printing test reports", isCorrect: false, rationale: "Unrelated." },
+                    { text: "To eliminate the need for user interfaces", isCorrect: false, rationale: "Unrelated." }
+                ]
+            },
+            {
+                question: "What is 'Stress Testing' (Load Testing) in software development?",
+                options: [
+                    { text: "Testing how a system performs under extreme heavy loads, high user concurrency, or massive data volumes beyond normal operating conditions", isCorrect: true, rationale: "Stress testing checks system breaking points and performance limits under heavy traffic." },
+                    { text: "Measuring how much mental stress programmers experience while coding", isCorrect: false, rationale: "Stress testing evaluates software system limits, not human stress." },
+                    { text: "Bending computer keyboards over tables to test physical strength", isCorrect: false, rationale: "This is hardware destruction, not software load testing." },
+                    { text: "Checking printer paper jam resistance", isCorrect: false, rationale: "Unrelated." }
+                ]
+            },
+            {
+                question: "What is the difference between a 'Syntax Error' and a 'Logic Error' in programming code?",
+                options: [
+                    { text: "A syntax error violates programming language grammar rules (caught by compilers); a logic error allows code to run but produces incorrect results due to flawed reasoning", isCorrect: true, rationale: "Syntax errors stop compilation; logic errors run but produce wrong calculations or behaviors." },
+                    { text: "Syntax errors are hardware failures; logic errors are software failures", isCorrect: false, rationale: "Both are software code issues." },
+                    { text: "Syntax errors occur on paper; logic errors occur in the cloud", isCorrect: false, rationale: "Unrelated." },
+                    { text: "There is no difference between them", isCorrect: false, rationale: "Grammar rules versus reasoning flaws differ fundamentally." }
+                ]
+            },
+            {
+                question: "Why should independent testers (separate from the programmers who wrote the code) test the software where possible?",
+                options: [
+                    { text: "Because programmers often overlook their own mistakes due to bias, whereas independent testers bring fresh perspectives to find hidden bugs", isCorrect: true, rationale: "Independent testers provide objective evaluation and uncover blind spots missed by developers." },
+                    { text: "Because programmers are legally banned from running test plans", isCorrect: false, rationale: "Programmers test their own code initially (unit testing), but independent testing adds objectivity." },
+                    { text: "Because independent testers work for zero pay", isCorrect: false, rationale: "Unrelated." },
+                    { text: "To make software development take twice as long", isCorrect: false, rationale: "Unrelated." }
+                ]
+            },
+            {
+                question: "Which summary best encapsulates 7.3 / 7.3.1 Development and Testing in IGCSE ICT?",
+                options: [
+                    { text: "Development and testing involve creating software according to design specs and systematically testing it using normal, boundary (extreme), and erroneous test data documented in test plans to find and debug errors before live implementation", isCorrect: true, rationale: "Development and testing implement software designs and verify robustness using structured test plans and diverse test data." },
+                    { text: "Testing is a manual paper filing technique used exclusively by school librarians", isCorrect: false, rationale: "Testing is a core ICT software quality assurance stage." },
+                    { text: "Testing requires no test data or test plans whatsoever", isCorrect: false, rationale: "Test data and test plans are central to testing." },
+                    { text: "Testing is identical to anti-malware virus scanning", isCorrect: false, rationale: "Software testing evaluates system functionality, not malware scanning." }
+                ]
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let answered = false;
+
+        const questionCounter = document.getElementById("question-counter");
+        const scoreDisplay = document.getElementById("score-display");
+        const questionBox = document.getElementById("question-box");
+        const optionsContainer = document.getElementById("options-container");
+        const feedbackBox = document.getElementById("feedback-box");
+        const nextBtn = document.getElementById("next-btn");
+        const quizContainer = document.getElementById("quiz-container");
+        const resultsContainer = document.getElementById("results-container");
+        const finalScore = document.getElementById("final-score");
+
+        function loadQuestion() {
+            answered = false;
+            feedbackBox.classList.add("hidden");
+            nextBtn.classList.add("hidden");
+            
+            const q = questions[currentQuestionIndex];
+            questionCounter.textContent = `Question ${currentQuestionIndex + 1} of ${questions.length}`;
+            scoreDisplay.textContent = `Score: ${score}`;
+            questionBox.textContent = q.question;
+
+            // Shuffle options array randomly so correct answer is not always first
+            let shuffledOptions = [...q.options].sort(() => Math.random() - 0.5);
+
+            optionsContainer.innerHTML = "";
+            shuffledOptions.forEach((opt) => {
+                const btn = document.createElement("button");
+                btn.className = "option-btn";
+                btn.textContent = opt.text;
+                btn.onclick = () => selectOption(opt, shuffledOptions);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function selectOption(selectedOpt, shuffledOptions) {
+            if (answered) return;
+            answered = true;
+
+            const allOptionButtons = optionsContainer.children;
+
+            shuffledOptions.forEach((opt, idx) => {
+                allOptionButtons[idx].disabled = true;
+                if (opt.isCorrect) {
+                    allOptionButtons[idx].classList.add("correct");
+                } else if (opt === selectedOpt && !selectedOpt.isCorrect) {
+                    allOptionButtons[idx].classList.add("incorrect");
+                }
+            });
+
+            feedbackBox.classList.remove("hidden");
+            if (selectedOpt.isCorrect) {
+                score++;
+                scoreDisplay.textContent = `Score: ${score}`;
+                feedbackBox.className = "feedback-box correct-feedback";
+                feedbackBox.innerHTML = `<strong>Correct!</strong> ${selectedOpt.rationale}`;
+            } else {
+                feedbackBox.className = "feedback-box incorrect-feedback";
+                feedbackBox.innerHTML = `<strong>Incorrect.</strong> ${selectedOpt.rationale}`;
+            }
+
+            if (currentQuestionIndex < questions.length - 1) {
+                nextBtn.textContent = "Next Question";
+            } else {
+                nextBtn.textContent = "View Results";
+            }
+            nextBtn.classList.remove("hidden");
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                quizContainer.classList.add("hidden");
+                resultsContainer.classList.remove("hidden");
+                finalScore.textContent = `You scored ${score} out of ${questions.length}`;
+            }
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            resultsContainer.classList.add("hidden");
+            quizContainer.classList.remove("hidden");
+            loadQuestion();
+        }
+
+        // Initialize quiz on load
+        loadQuestion();
+    </script>
+</body>
+</html>
